@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 exports.getProfile = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.user_id;
+        console.log("iddd : ",userId)
         const user = await User.findOne({ user_id: userId }).select('-password');
-        console.log(user);
+        //console.log(user);
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }

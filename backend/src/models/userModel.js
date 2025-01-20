@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
     username: { type: String },
     Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true },
-    role: { type: String, default: 'user' },
+    role: { 
+        type: String, 
+        enum: ['user', 'employee', 'Admin', 'SuperAdmin'], // Allowed roles
+        default: 'user' 
+    },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
     profile_picture: { type: String, default: 'https://www.gravatar.com/avatar/' },
@@ -15,10 +19,17 @@ const userSchema = new mongoose.Schema({
     social_links: { type: Map, of: String },
 });
 
+// Pre-save middleware to hash password before saving
+// userSchema.pre('save', async function(next) {
+//     if (this.isModified('Password')) {
+//         this.Password = await bcrypt.hash(this.Password, 10);
+//     }
+//     next();
+// });
 
 // Method to compare passwords
 userSchema.methods.comparePassword = function(candidatePassword) {
-    return bcrypt.compareSync(candidatePassword, this.password);
+    return bcrypt.compare(candidatePassword, this.Password);
 };
 
 const User = mongoose.model('User', userSchema);
