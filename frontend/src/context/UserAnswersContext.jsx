@@ -40,7 +40,7 @@ export const UserAnswersProvider = ({ children }) => {
   const submitAnswers = async (answers) => {
     try {
       const token = localStorage.getItem('token'); // Retrieve the token
-      console.log('Token from localStorage:', token);
+      //console.log('Token from localStorage:', token);
       const response = await axios.post(
         'http://localhost:3001/api/question/submitSurvey',
         { answers }, // Send the answers in the request body
@@ -50,9 +50,9 @@ export const UserAnswersProvider = ({ children }) => {
           },
         }
       );
-      console.log("Response : " , response)
+      //console.log("Response : " , response)
       if (response.status === 201) {
-        console.log('Answers submitted successfully:', response.data);
+        //console.log('Answers submitted successfully:', response.data);
         return true;
       } else {
         console.error('Failed to submit answers:', response.data);

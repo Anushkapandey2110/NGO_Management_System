@@ -7,7 +7,7 @@ import NavBar from './components/NavBar'
 import Footer from './components/FooterPage'
 import Router from './routes/Router'
 import { AuthProvider } from './context/AuthContext';
-
+import { RoleAuthProvider } from './context/RoleAuthContext'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,7 +16,9 @@ function App() {
     
     <>
     <AuthProvider>
-      <Router />
+      <RoleAuthProvider>
+        <Router />
+      </RoleAuthProvider>
     </AuthProvider>
     {/* <QuestionnaireList/>
     <Footer/> */}

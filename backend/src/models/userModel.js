@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
     Password: { type: String, required: true },
     role: { 
         type: String, 
-        enum: ['user', 'employee', 'Admin', 'SuperAdmin'], // Allowed roles
-        default: 'user' 
+        enum: ['User', 'Employee', 'Admin', 'SuperAdmin'], // Allowed roles
+        default: 'User' 
     },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },

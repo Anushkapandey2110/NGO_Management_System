@@ -42,7 +42,7 @@ function PrivateRoute() {
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("Checking token:", token);
+    //console.log("Checking token:", token);
   }, [token]);
   // return  <Layout /> // remove this line when authentication feature is implemented
   return token ? <Layout /> : <Navigate to="/login" />;  // ✅ Redirect to /login if not authenticated

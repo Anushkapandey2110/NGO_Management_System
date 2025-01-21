@@ -29,7 +29,7 @@
 //     setIsLoading(true);
 //     // Simulate API call
 //     await new Promise(resolve => setTimeout(resolve, 1000));
-//     console.log('Submitted answers:', userAnswers);
+//     //console.log('Submitted answers:', userAnswers);
 //     toggleExpand();
 //     setIsLoading(false);
 //     // You can add logic here to handle the submission (e.g., show a success message)
@@ -186,7 +186,7 @@
 //   const handleSubmit = async () => {
 //     setIsLoading(true);
 //     await new Promise((resolve) => setTimeout(resolve, 1000));
-//     console.log('Submitted answers:', userAnswers);
+//     //console.log('Submitted answers:', userAnswers);
 //     setIsLoading(false);
 //     setIsSubmitted(true);
 //   };

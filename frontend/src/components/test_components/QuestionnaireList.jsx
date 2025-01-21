@@ -90,11 +90,11 @@ const Questionnaire = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     const success = await submitAnswers(userAnswers);
-    console.log(success)
+    //console.log(success)
     if (success) {
-      console.log('Answers submitted successfully!');
+      //console.log('Answers submitted successfully!');
     } else {
-      console.log('Error submitting answers.');
+      //console.log('Error submitting answers.');
     }
     setIsLoading(false);
   };
@@ -122,27 +122,27 @@ const Questionnaire = () => {
   //       setLoading(false);
   //     }
   //   };
-  //   console.log("loaded")
+  //   //console.log("loaded")
   //   fetchQuestions();
   // }, []);
 
   const handleOptionChange = async (event) => {
     const selected = event.target.value;
-    console.log(selected);
+    //console.log(selected);
     setSelectedOption(selected);
     setHasSelected(true);
     setLoading(true);
-    console.log(selected);
+    //console.log(selected);
     try {
       const token = localStorage.getItem('token'); // Retrieve the token
-      console.log('Token from localStorage:', token);
+      //console.log('Token from localStorage:', token);
       const response = await axios.get(`http://localhost:3001/api/question/getQuestions`, {
         headers: {
           Authorization: `Bearer ${token}`, // Add the token
         },
         params: { question_type: selected }
       });
-      console.log(response.data);  // Check the full response
+      //console.log(response.data);  // Check the full response
 
         // Correctly assign the data to questionsData
         if (response.data.success) {

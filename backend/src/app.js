@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const connectDB = require('./db/mongoose');
 const User = require('./models/userModel');
+const Event= require('./models/eventModel')
 const morgan = require('morgan');
 const path = require('path');
 const authMiddleware = require('./middlewares/authMiddleware');
@@ -23,12 +24,12 @@ console.log("In app.js")
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
-
+const eventRoutes= require('./routes/eventRoutes')
 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', profileRoutes);
-
+app.use('/api/events', eventRoutes)
 
 app.get('/',(req,res)=>{
     res.send("hello ons lash route");

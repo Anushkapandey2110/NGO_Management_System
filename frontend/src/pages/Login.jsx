@@ -16,31 +16,35 @@ const AuthForms = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
     const loginUser= async ()=>{
      
-        console.log("in proceed")
+      
         try {
+         
           console.log(" in try")
           console.log(isLogin)
           let response = null;
+  
           if(isLogin){
+            
             response = await axios.post('http://localhost:3001/api/auth/login', {
               Email,
               Password
             });
             
+            
           }else{
-            console.log("Checking password")
+            //console.log("Checking password")
             if(Password === ConfirmPassword ){
-              console.log("Checked password")
-              console.log("checked both passwords")
+              //console.log("Checked password")
+              //console.log("checked both passwords")
               
               response = await axios.post('http://localhost:3001/api/auth/register', {
                 Email,
                 Password,ConfirmPassword,Name,LastName,
               });
-              console.log("after response")
+              console.log("after response",response.data.token)
             }else {
               console.error("Passwords do not match");
               return;
@@ -49,15 +53,15 @@ const AuthForms = () => {
           
   
           if (response.data && response.data.token) {
-            console.log("Login successful:", response.data);
+            console.log("Register successful:", response.data);
             login(response.data.token);
-            localStorage.setItem("site", response.data.token);
+            // localStorage.setItem("site", response.data.token);
             navigate("/dashboard");
           } else {
             throw new Error("Invalid response from server");
           }
         } catch (error) {
-          // console.log("Login failed:", error.response?.data || error.message);  // ✅ Correct
+          // //console.log("Login failed:", error.response?.data || error.message);  // ✅ Correct
         } 
       
     }
@@ -65,7 +69,7 @@ const AuthForms = () => {
 
   function Submit(e){
     e.preventDefault();
-    console.log("came here")
+    //console.log("came here")
     loginUser()
   }
   return (
