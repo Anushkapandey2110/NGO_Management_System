@@ -13,7 +13,7 @@ const eventSchema = new mongoose.Schema({
   location: { type: String, required: true },
   status: { 
     type: String, 
-    enum: ['pending', 'approved', 'rejected'], 
+    enum: ['pending', 'approved', 'rejected', 'completed'], 
     default: 'pending' 
   },
   createdBy: { 

@@ -30,7 +30,7 @@ exports.authMiddleware = async (req, res, next) => {
         const decoded = verifyToken(token);
         // console.log(decoded)
         const user = await User.findOne({ user_id: decoded.id });
-        // console.log("User", user);
+        console.log("User", user);
         req.user = user;
         console.log(req.user.role);
         next();
