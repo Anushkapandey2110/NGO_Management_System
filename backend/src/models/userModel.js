@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
+    registeredEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }], // Events registered by the user
     profile_picture: { type: String, default: 'https://www.gravatar.com/avatar/' },
     bio: { type: String },
     social_links: { type: Map, of: String },
