@@ -1,6 +1,7 @@
 const { verifyToken } = require('../utils/jwtUtils');
 const User = require('../models/userModel')
 exports.authMiddleware = async (req, res, next) => {
+    // console.log("In here");
     var token = req.cookies.token;
     // console.log("token : ", req.headers)
     const authHeader = req.headers['authorization'];
@@ -17,7 +18,7 @@ exports.authMiddleware = async (req, res, next) => {
     try {
         const currentTime = Math.floor(Date.now() / 1000);
         
-        console.log('Current Time:', currentTime);
+        // console.log('Current Time:', currentTime);
         // console.log('Token Expiration Time:', decoded.exp);
         // console.log('Decoded Payload:', decoded);
         
@@ -30,7 +31,7 @@ exports.authMiddleware = async (req, res, next) => {
         const decoded = verifyToken(token);
         // console.log(decoded)
         const user = await User.findOne({ user_id: decoded.id });
-        console.log("User", user);
+        // console.log("User", user);
         req.user = user;
         console.log(req.user.role);
         next();

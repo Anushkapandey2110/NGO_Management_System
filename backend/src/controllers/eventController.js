@@ -42,19 +42,21 @@ exports.createEvent = async (req, res) => {
     }
 };
 
-
 exports.approveEvent = async (req, res) => {
     try {
-        const { eventId } = req.params;
+        // console.log("Req : ",req);
+        const { eventid } = req.params;
+        console.log("Event ID", eventid);
 
         if (req.user.role !== 'SuperAdmin') {
             return res.status(403).json({ message: 'Access denied.' });
         }
         const event = await Event.findByIdAndUpdate(
-            eventId,
+            eventid,
             { status: 'approved' },
             { new: true }
         );
+        console.log("event : ", event);
 
         if (!event) {
             return res.status(404).json({ message: 'Event not found.' });
@@ -141,48 +143,47 @@ exports.getEvent = async (req, res) => {
     }
 };
 
-
-exports.registerForEvent=async (req,res)=>{
+exports.registerForEvent = async (req, res) => {
     try {
         // Extract userId from req.user (set by authentication middleware)
         const userId = req.user.id; // Assuming req.user is populated after authentication
         if (!userId) {
-          return res.status(401).json({ success: false, message: 'Unauthorized: No user ID provided' });
+            return res.status(401).json({ success: false, message: 'Unauthorized: No user ID provided' });
         }
-    
+
         // Extract eventId from the request body
         const { eventId } = req.body;
         if (!eventId) {
-          return res.status(400).json({ success: false, message: 'Bad Request: Event ID is required' });
+            return res.status(400).json({ success: false, message: 'Bad Request: Event ID is required' });
         }
-    
+
         // Find the event
         const event = await Event.findById(eventId);
         console.log("event : ", event);
         if (!event) {
-          return res.status(404).json({ success: false, message: 'Event not found' });
+            return res.status(404).json({ success: false, message: 'Event not found' });
         }
-    
+
         // Find the user
         const user = await User.findById(userId);
         if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
-    
+
         // Check if the user is already registered for the event
         if (user.registeredEvents.includes(eventId)) {
-          return res.status(400).json({ success: false, message: 'You are already registered for this event' });
+            return res.status(400).json({ success: false, message: 'You are already registered for this event' });
         }
-    
+
         // Register the user for the event
         user.registeredEvents.push(eventId);
         await user.save();
-    
+
         // Add the user to the event's participants
         event.participants.push({ user: userId, role: 'attendee' });
-        let eve= await event.save();
+        let eve = await event.save();
         console.log("event : ", eve)
-    
+
         return res.status(200).json({ success: true, message: 'Successfully registered for the event' });
     } catch (error) {
         console.error('Error registering for event:', error);
@@ -190,26 +191,57 @@ exports.registerForEvent=async (req,res)=>{
     }
 }
 
-
 exports.getRegisteredEvents = async (req, res) => {
-  try {
-    const userId = req.user.id; // Assume `req.user` contains the authenticated user's details
+    try {
+        const userId = req.user.id; // Assume `req.user` contains the authenticated user's details
 
-    // Fetch the user with populated registered events
-    const user = await User.findById(userId).populate({
-      path: 'registeredEvents',
-      select: 'title description date location status', // Only select relevant fields from Event
-    });
+        // Fetch the user with populated registered events
+        const user = await User.findById(userId).populate({
+            path: 'registeredEvents',
+            select: 'title description date location status', // Only select relevant fields from Event
+        });
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({ registeredEvents: user.registeredEvents });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error fetching registered events', error });
     }
-
-    return res.status(200).json({ registeredEvents: user.registeredEvents });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error fetching registered events', error });
-  }
 };
 
-
+//left this route with testing
+exports.markComplete = async (req, res) => {
+    try {
+      const { eventId } = req.body;
+  
+      // Fetch the event from the database
+      const event = await Event.findById(eventId);
+  
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found.' });
+      }
+  
+      // Check permissions based on role
+      if (req.user.role === 'Employee') {
+        // Employees can only mark events they created
+        if (event.createdBy.toString() !== req.user._id.toString()) {
+          return res.status(403).json({ message: 'Access denied: You can only mark events you created as completed.' });
+        }
+      } else if (!['Admin', 'SuperAdmin'].includes(req.user.role)) {
+        // Only Admins, SuperAdmins, and eligible Employees are allowed
+        return res.status(403).json({ message: 'Access denied: Insufficient permissions.' });
+      }
+  
+      // Mark the event as completed
+      event.status = 'completed';
+      await event.save();
+  
+      res.status(200).json({ message: 'Event marked as completed successfully.', event });
+    } catch (error) {
+      console.error('Error marking event as completed:', error);
+      res.status(500).json({ message: 'Server error. Please try again later.', error });
+    }
+};
