@@ -4,14 +4,14 @@ import NavBar from '../components/NavBar';
 import FooterPage from '../components/FooterPage';
 // import QuestionnaireList from '../components/QuestionnaireList';
 import Questionnaire from '../components/test_components/QuestionnaireList';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import Landing from '../pages/Landing';
 import Dashboard from '../pages/Dashboard';
 import Notifications from '../pages/Notifications';
 import Download from '../pages/Download';
 import Error from '../components/Error';
 import Login from '../pages/Login';  // ✅ Import Login Page
-import { UserAnswersProvider } from '../context/UserAnswersContext';
+import { UserAnswersProvider } from '../../context/UserAnswersContext';
 function Router() {
   return (
     <BrowserRouter>
