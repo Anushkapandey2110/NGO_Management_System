@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { formatDate } from '../utils/dateUtils';
 import axios from 'axios';
+import AuthContext from '../context/AuthContext';
 import { Calendar, MapPin, Clock, Info } from 'lucide-react';
 
 const FloatingPreview = ({ event, position }) => {
@@ -40,6 +41,27 @@ const Leftbox = () => {
   const [eve, setEve] = useState([]);
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [previewPosition, setPreviewPosition] = useState(null);
+  const { token }=useContext(AuthContext);
+  const HandleRegister = async (eventId) => {
+    console.log("Registestration Triggered : ",eventId);
+    try {
+      console.log("Sent Register Request");
+      const response = await axios.post(
+        'http://localhost:3001/api/events/registerForEvent',
+        { eventId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log("Response : ", response);
+      if (response.status === 200) {
+        alert('Successfully registered for the event!');
+      } else {
+        alert(response.data.message || 'Failed to register.');
+      }
+    } catch (error) {
+      console.error('Error registering for event:', error);
+      // alert('An error occurred while registering.');
+    }
+  };
   // const events = [
   //   { name: 'Community Cleanup', date: '2025-07-16', location: 'City Park' },
   //   { name: 'Fundraising Gala', date: '2025-08-01', location: 'Grand Hotel' },
@@ -56,7 +78,7 @@ const Leftbox = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        console.log('Token from localStorage:', token);
+        
         const response = await axios.get(
           'http://localhost:3001/api/events/getEvent',
           {
@@ -81,17 +103,6 @@ const Leftbox = () => {
     fetchData();
   }, []);
 
-  // ✅ Helper function to format date
-  // const formatDate = (isoDate) => {
-  //   return new Date(isoDate).toLocaleString("en-US", {
-  //     day: "2-digit",
-  //     month: "short",
-  //     year: "numeric",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //     hour12: true,
-  //   });
-  // };
 
   const handleMouseEnter = (event, e) => {
     setHoveredEvent(event);
@@ -112,6 +123,7 @@ const Leftbox = () => {
         <CardContent>
           <div className="space-y-4 max-h-[69vh] overflow-y-auto scrollbar scrollbar-thumb-gray-500">
           {eve.map((event, index) => (
+            
               <div 
                 key={index}
                 className="flex justify-between items-center p-4 border rounded hover:bg-gray-50 transition-colors duration-200"
@@ -124,8 +136,8 @@ const Leftbox = () => {
                   {/* <p className="text-sm text-gray-500">{formatDate(event.date)}</p>
                   <p className="text-sm text-gray-500">{event.location}</p> */}
                 </div>
-                <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-red-600 transition-colors">
-                  Delete
+                <button onClick={() => HandleRegister(event._id)} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-red-600 transition-colors">
+                  Register
                 </button>
               </div>
             ))}

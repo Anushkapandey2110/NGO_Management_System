@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import Login from '../component/login'
-import MainView from "../MainView";
+import MainView from "../component/MainView";
 import Dashboard from "../component/TestPages/Dashboard";
 import CreateEvent from "../component/TestPages/CreateEvent";
 import Profile from "../component/TestPages/Profile";

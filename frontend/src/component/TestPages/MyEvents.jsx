@@ -56,8 +56,8 @@ const EventList = () => {
     <Card className=''> 
       {/* <h2 className="text-2xl font-bold">Event List</h2> */}
       <CardHeader>
-                <CardTitle >Event List</CardTitle>
-              </CardHeader>
+        <CardTitle >Event List</CardTitle>
+      </CardHeader>
       {/* <div className="overflow-x-auto"> */}
       <CardContent>
       <div className="space-y-4 min-h-[69vh] " >

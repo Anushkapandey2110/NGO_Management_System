@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Header from './component/header';
-import NavBar from './component/navBar';
-import Leftbox from './component/left_box';
-import MidBox from './component/midBox';
-import RightTop from './component/rightTop';
-import RightBottom from './component/rightBottom';
+import Header from './header';
+import NavBar from './navBar';
+import Leftbox from './left_box';
+import MidBox from './midBox';
+import RightTop from './rightTop';
+import RightBottom from './rightBottom';
 
 
 

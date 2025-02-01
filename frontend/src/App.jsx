@@ -28,19 +28,11 @@
 
 // export default App
 
-
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { Header } from './test'
-import MainView from './MainView'
-import Login from './component/login'
 import { BrowserRouter } from 'react-router-dom'
 import Router from './router/router'
 import { AuthProvider } from './context/AuthContext'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>

@@ -1,5 +1,6 @@
 import {Card, CardContent, CardHeader, CardTitle}from './ui/card'
-import { Calendar } from 'lucide-react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 const RightBottom =()=>{
     const stats = {
         easy: { count: 91, total: 852 },
