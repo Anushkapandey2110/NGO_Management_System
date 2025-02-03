@@ -10,6 +10,7 @@ import Slash from "../component/TestPages/SlashPage";
 import Home from "../component/TestPages/home";
 import { useEffect } from "react";
 import EventList  from "../component/TestPages/MyEvents"
+import EventDetails from "../component/TestPages/EventDetails";
 const Router = () => {
     return (
       
@@ -26,6 +27,7 @@ const Router = () => {
               <Route path="home" element={<Home />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="myEvents" element={<EventList />} />
+              <Route path="events/:eventId" element={<EventDetails />} />
               <Route path="profile" element={<Profile />} />
             </Route>
           </Route>

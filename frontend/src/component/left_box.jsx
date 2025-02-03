@@ -38,7 +38,7 @@ const FloatingPreview = ({ event, position }) => {
 };
 
 const Leftbox = () => {
-  const [eve, setEve] = useState([]);
+  const [event, setEvent] = useState([]);
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [previewPosition, setPreviewPosition] = useState(null);
   const { token }=useContext(AuthContext);
@@ -53,6 +53,7 @@ const Leftbox = () => {
       );
       console.log("Response : ", response);
       if (response.status === 200) {
+        setEvent(event.filter((event) => event._id !== eventId));
         alert('Successfully registered for the event!');
       } else {
         alert(response.data.message || 'Failed to register.');
@@ -62,18 +63,7 @@ const Leftbox = () => {
       // alert('An error occurred while registering.');
     }
   };
-  // const events = [
-  //   { name: 'Community Cleanup', date: '2025-07-16', location: 'City Park' },
-  //   { name: 'Fundraising Gala', date: '2025-08-01', location: 'Grand Hotel' },
-  //   { name: 'Youth Mentorship Program', date: '2025-08-15', location: 'Community Center' },
-  //   { name: 'Youth Mentorship Program', date: '2025-08-15', location: 'Community Center' },
-  //   { name: 'Youth Mentorship Program', date: '2025-08-15', location: 'Community Center' },
-  //   { name: 'Community Cleanup', date: '2025-07-16', location: 'City Park' },
-  //   { name: 'Fundraising Gala', date: '2025-08-01', location: 'Grand Hotel' },
-  //   { name: 'Youth Mentorship Program', date: '2025-08-15', location: 'Community Center' },
-  //   { name: 'Youth Mentorship Program', date: '2025-08-15', location: 'Community Center' },
-  //   { name: 'Youth Mentorship Program', date: '2025-08-15', location: 'Community Center' }
-  // ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,7 +81,7 @@ const Leftbox = () => {
         
         if (response.status === 200) {
           console.log('Answers submitted successfully:', response.data);
-          setEve(response.data.events);
+          setEvent(response.data.events);
         } else {
           console.error('Failed to fetch events:', response.data);
         }
@@ -122,7 +112,7 @@ const Leftbox = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4 max-h-[69vh] overflow-y-auto scrollbar scrollbar-thumb-gray-500">
-          {eve.map((event, index) => (
+          {event.map((event, index) => (
             
               <div 
                 key={index}
@@ -133,8 +123,6 @@ const Leftbox = () => {
               >
                 <div>
                   <p className="font-medium">{event.title}</p>
-                  {/* <p className="text-sm text-gray-500">{formatDate(event.date)}</p>
-                  <p className="text-sm text-gray-500">{event.location}</p> */}
                 </div>
                 <button onClick={() => HandleRegister(event._id)} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-red-600 transition-colors">
                   Register

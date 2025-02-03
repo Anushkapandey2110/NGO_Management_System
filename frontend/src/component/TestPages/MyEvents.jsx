@@ -1,11 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import AuthContext from "../../context/AuthContext";
+
 const EventList = () => {
   const [events, setEvents] = useState([]);
   const { token }=useContext(AuthContext)
+  const navigate = useNavigate();  // Initialize navigation
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -27,6 +30,10 @@ const EventList = () => {
     fetchEvents();
   }, []);
 
+  
+
+
+
   const formatDate = (isoDate) => {
     return new Date(isoDate).toLocaleString("en-US", {
       day: "2-digit",
@@ -38,16 +45,28 @@ const EventList = () => {
     });
   };
 
-  const deleteEvent = async (id) => {
+  
+
+
+  const deleteEvent = async (eventId) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3001/api/events/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.post(
+        'http://localhost:3001/api/events/unregisterFromEvent',
+        { eventId },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
+      );
 
-      setEvents(events.filter((event) => event._id !== id));
-    } catch (error) {
-      console.error("Error deleting event:", error);
+      setEvents(events.filter((event) => event._id !== eventId));
+      console.log("response is : ",response.data);
+    }catch (error) {
+        console.error('Error unregistering from event:', error.response?.data || error.message);
+        return error.response?.data || { success: false, message: 'An error occurred' };
     }
   };
 
@@ -73,8 +92,12 @@ const EventList = () => {
           <TableBody>
             {(events || []).length > 0 ? (
               events.map((event) => (
-                <TableRow key={event._id}>
-                  <TableCell>{event.title}</TableCell>
+                <TableRow
+                     
+                    >
+                  <TableCell  key={event._id}
+                      className="cursor-pointer hover:bg-gray-100"
+                      onClick={() => navigate(`/events/${event._id}`)}>{event.title}</TableCell>
                   <TableCell>{formatDate(event.date)}</TableCell>
                   <TableCell>{event.location}</TableCell>
                   <TableCell>
