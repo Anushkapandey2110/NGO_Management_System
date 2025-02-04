@@ -9,7 +9,7 @@ const FloatingPreview = ({ event, position }) => {
   if (!event || !position) return null;
 
   return (
-    <div 
+    <div
       className="fixed z-50 w-64 border-solid-red bg-white rounded-lg shadow-xl border"
       style={{
         left: `${position.x + 20}px`,
@@ -41,9 +41,9 @@ const Leftbox = () => {
   const [event, setEvent] = useState([]);
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [previewPosition, setPreviewPosition] = useState(null);
-  const { token }=useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const HandleRegister = async (eventId) => {
-    console.log("Registestration Triggered : ",eventId);
+    console.log("Registestration Triggered : ", eventId);
     try {
       console.log("Sent Register Request");
       const response = await axios.post(
@@ -68,7 +68,7 @@ const Leftbox = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        
+
         const response = await axios.get(
           'http://localhost:3001/api/events/getEvent',
           {
@@ -78,7 +78,7 @@ const Leftbox = () => {
           }
         );
         console.log("Response: ", response.data.events);
-        
+
         if (response.status === 200) {
           console.log('Answers submitted successfully:', response.data);
           setEvent(response.data.events);
@@ -112,9 +112,9 @@ const Leftbox = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4 max-h-[69vh] overflow-y-auto scrollbar scrollbar-thumb-gray-500">
-          {event.map((event, index) => (
-            
-              <div 
+            {event.map((event, index) => (
+
+              <div
                 key={index}
                 className="flex justify-between items-center p-4 border rounded hover:bg-gray-50 transition-colors duration-200"
                 onMouseEnter={(e) => handleMouseEnter(event, e)}
@@ -130,8 +130,8 @@ const Leftbox = () => {
               </div>
             ))}
           </div>
-          <FloatingPreview 
-            event={hoveredEvent} 
+          <FloatingPreview
+            event={hoveredEvent}
             position={previewPosition}
           />
         </CardContent>

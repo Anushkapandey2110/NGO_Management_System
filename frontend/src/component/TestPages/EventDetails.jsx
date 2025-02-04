@@ -14,8 +14,8 @@ const EventDetails = () => {
     const fetchEventDetails = async () => {
       try {
         const response = await axios.get("http://localhost:3001/api/events/getRegisteredEvents", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (response.status === 200) {
           setEvent(response.data);

@@ -5,8 +5,8 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
-  const [lastAttemptedRoute, setLastAttemptedRoute] = useState(null); 
-  const navigate= useNavigate();
+  const [lastAttemptedRoute, setLastAttemptedRoute] = useState(null);
+  const navigate = useNavigate();
 
 
   const login = (newToken) => {
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, setLastAttemptedRoute}}>
+    <AuthContext.Provider value={{ token, login, logout, setLastAttemptedRoute }}>
       {children}
     </AuthContext.Provider>
   );

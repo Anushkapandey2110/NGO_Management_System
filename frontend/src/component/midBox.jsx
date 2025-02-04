@@ -6,7 +6,7 @@ const FloatingPreview = ({ event, position }) => {
   if (!event || !position) return null;
 
   return (
-    <div 
+    <div
       className="fixed z-50 w-64 bg-white rounded-lg shadow-xl border"
       style={{
         left: `${position.x + 20}px`,
@@ -36,7 +36,7 @@ const FloatingPreview = ({ event, position }) => {
 const Leftbox = () => {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [previewPosition, setPreviewPosition] = useState(null);
-  
+
   const events = [
     { name: 'Community Cleanup', date: '2025-07-16', location: 'City Park' },
     { name: 'Fundraising Gala', date: '2025-08-01', location: 'Grand Hotel' },
@@ -64,7 +64,7 @@ const Leftbox = () => {
         <CardContent>
           <div className="space-y-4 max-h-[69vh] overflow-y-auto">
             {events.map((event, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex justify-between items-center p-4 border rounded hover:bg-gray-50 transition-colors duration-200"
                 onMouseEnter={(e) => handleMouseEnter(event, e)}
@@ -82,8 +82,8 @@ const Leftbox = () => {
               </div>
             ))}
           </div>
-          <FloatingPreview 
-            event={hoveredEvent} 
+          <FloatingPreview
+            event={hoveredEvent}
             position={previewPosition}
           />
         </CardContent>

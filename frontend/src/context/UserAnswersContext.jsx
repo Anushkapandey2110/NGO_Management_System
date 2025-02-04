@@ -9,7 +9,7 @@ export const useUserAnswers = () => {
 export const UserAnswersProvider = ({ children }) => {
   const [userAnswers, setUserAnswers] = useState([]);
 
-  const addAnswer = (unique_id,description, answer, question_type, user_id) => {
+  const addAnswer = (unique_id, description, answer, question_type, user_id) => {
     setUserAnswers((prev) => {
       const existingAnswerIndex = prev.findIndex(
         (answer) => answer.unique_id === unique_id

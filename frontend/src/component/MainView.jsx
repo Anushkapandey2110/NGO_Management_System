@@ -17,18 +17,18 @@ const MainView = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header/>
+      <Header />
       <NavBar />
       <div className="mx-auto p-4 grid grid-cols-12 gap-4">
-          <Leftbox />
-          {/* <MidBox /> */}
-          <Outlet />
-          {/* <MidBox /> */}
-          {/* Right Column - Calendar & Stats */}
-          <div className="col-span-3 space-y-5">
-            <RightTop />
-            <RightBottom />
-          </div>
+        <Leftbox />
+        {/* <MidBox /> */}
+        <Outlet />
+        {/* <MidBox /> */}
+        {/* Right Column - Calendar & Stats */}
+        <div className="col-span-3 space-y-5">
+          <RightTop />
+          <RightBottom />
+        </div>
       </div>
     </div>
   );

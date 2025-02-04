@@ -17,7 +17,7 @@
 
 //   return (
 //     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center">
-      {/* <Card className="w-[350px] bg-white">
+{/* <Card className="w-[350px] bg-white">
         <CardHeader>
           <CardTitle>Login</CardTitle>
         </CardHeader>
@@ -49,7 +49,7 @@
           </form>
         </CardContent>
       </Card> */}
-      {/* <Card className="w-[350px] bg-white">
+{/* <Card className="w-[350px] bg-white">
       <CardHeader>
         <CardTitle>Create account</CardTitle>
         <CardDescription>Enter your information to create an account.</CardDescription>
@@ -86,6 +86,7 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import { useRoleAuth } from "../context/RoleAuthContext"
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -96,6 +97,7 @@ const Login = () => {
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { setRole } = useRoleAuth();
 
   const loginUser = async () => {
     try {
@@ -122,6 +124,7 @@ const Login = () => {
 
       if (response.data && response.data.token) {
         login(response.data.token);
+        setRole(response.data.token);
         localStorage.setItem("site", response.data.token);
         navigate("/dashboard");
       } else {

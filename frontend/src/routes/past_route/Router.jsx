@@ -19,12 +19,12 @@ function Router() {
         {/* Public Routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Landing />} />
-            {/* ✅ Login Route */}
+          {/* ✅ Login Route */}
         </Route>
         <Route path="/login" element={<Login />} />
         {/* Protected Routes */}
-        <Route element={<PrivateRoute />}>  
-        {/* <Route element={<Layout />}> */}
+        <Route element={<PrivateRoute />}>
+          {/* <Route element={<Layout />}> */}
           <Route path="/download" element={<Download />} />
           <Route path="/survey" element={<Questionnaire />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -56,8 +56,8 @@ function Layout() {
         <NavBar />
       </div>
       <main className="flex-grow min-h-[90vh]">
-      <UserAnswersProvider> 
-        <Outlet />
+        <UserAnswersProvider>
+          <Outlet />
         </UserAnswersProvider>
       </main>
       <FooterPage />

@@ -32,14 +32,17 @@ import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 import Router from './router/router'
 import { AuthProvider } from './context/AuthContext'
+import {RoleAuthProvider } from './context/RoleAuthContext'
 function App() {
 
   return (
     <BrowserRouter>
-    <AuthProvider>
-      <Router />
-    </AuthProvider>
-  </BrowserRouter>
+      <AuthProvider>
+        <RoleAuthProvider>
+          <Router />
+        </RoleAuthProvider>
+      </AuthProvider>
+   </BrowserRouter>
   )
 }
 
