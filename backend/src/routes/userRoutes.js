@@ -3,8 +3,8 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
-const { getUserProfile } = require('../controllers/userController');
+const { Search } = require('../controllers/userController');
 
-router.get('/profile', authMiddleware, getUserProfile);
-
+// router.get('/profile', authMiddleware, getUserProfile);
+router.get('/Search', Search);
 module.exports = router;

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 exports.getProfile = async (req, res) => {
     try {
         const userId = req.user.user_id;
-        console.log("iddd : ",userId)
+        console.log("iddd : ", userId)
         const user = await User.findOne({ user_id: userId }).select('-password');
         //console.log(user);
         if (!user) {
@@ -12,7 +12,7 @@ exports.getProfile = async (req, res) => {
         }
         res.json(user);
     } catch (err) {
-        res.status(500).send('Server error'+ err.message);
+        res.status(500).send('Server error' + err.message);
     }
 };
 
@@ -21,7 +21,7 @@ exports.updateProfile = async (req, res) => {
     try {
         const userId = req.user.id;
         let user = await User.findOne({ user_id: userId }).select('-password');
-        
+
         if (!user) {
             return res.status(404).json({ success: false, msg: 'User not found' });
         }
@@ -54,6 +54,6 @@ exports.changePassword = async (req, res) => {
         await user.save();
         res.json({ success: true, msg: 'Password updated successfully' });
     } catch (err) {
-        res.status(500).send('Server error'+ err.message);
+        res.status(500).send('Server error' + err.message);
     }
 };

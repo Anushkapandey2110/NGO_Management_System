@@ -18,25 +18,32 @@ exports.register = async (req, res) => {
         if (user) {
             return res.status(400).json({ success: false, message: 'Email already exists' });
         }
-        let username=Email;
+        let username = Email;
         // Create new user
-        
+
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
         Password = await bcrypt.hash(Password, salt);
-        user = new User({ username, Email, Password});
+        user = new User({ username, Email, Password });
         await user.save();
 
         // Generate JWT token
+        console.log("Useerrr ", user)
         const token = generateToken(user);
         //console.log("token Sent frontned register :", token)
         //console.log(token)
         // res.cookie('token', token, { httpOnly: true });
         res.cookie('token', token, { httpOnly: true, secure: true });
         //console.log("Sent the token and will send response")
-        
-        res.status(201).json({ success: true, message: 'User registered', token });
+        console.log(" Rolee :", user.role)
+        res.status(201).json({
+            success: true, message: 'User registered', token, user: {
+                id: user._id,
+                username: user.username,
+                role: user.role, // Send role to frontend
+            },
+        });
     } catch (err) {
         console.error(err.message);
         console.log("Authcotroller")
@@ -46,14 +53,14 @@ exports.register = async (req, res) => {
 
 // Login user
 exports.login = async (req, res) => {
-    const { Email, Password} = req.body;
+    const { Email, Password } = req.body;
     // const Password="adi673";
     console.log(Email, Password);
     //console.log("Login")
     try {
         // Check if the user exists
         let user = await User.findOne({ Email });
-        console.log("user : ",user)
+        console.log("user : ", user)
         if (!user) {
             console.log("user not found")
             return res.status(400).json({ success: false, message: 'User not found' });
@@ -68,13 +75,16 @@ exports.login = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Invalid credentials' });
         }
 
-        // Generate JWT token
         const token = generateToken(user);
-        console.log("token Sent frontned login :", token)
-        // res.cookie('token', token, { httpOnly: true });
         res.cookie('token', token, { httpOnly: true, secure: true });
-
-        res.json({ success: true, message: 'User logged in', token });
+        console.log(" Rolee :", user.role)
+        res.json({
+            success: true, message: 'User logged in', token, user: {
+                id: user._id,
+                username: user.username,
+                role: user.role, // Send role to frontend
+            },
+        });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ success: false, error: 'Server error' });

@@ -7,10 +7,10 @@ const userSchema = new mongoose.Schema({
     username: { type: String },
     Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true },
-    role: { 
-        type: String, 
+    role: {
+        type: String,
         enum: ['User', 'Employee', 'Admin', 'SuperAdmin'], // Allowed roles
-        default: 'User' 
+        default: 'User'
     },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
 // });
 
 // Method to compare passwords
-userSchema.methods.comparePassword = function(candidatePassword) {
+userSchema.methods.comparePassword = function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.Password);
 };
 

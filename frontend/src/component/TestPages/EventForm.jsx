@@ -1,32 +1,60 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card"
 import ModeratorSearch from "./Moderator"
+import AuthContext from "../../context/AuthContext"
+import axios from "axios"
 export default function EventForm() {
+    const { token }=useContext(AuthContext)
     const [title, setTitle] = useState("Charity Fundraiser")
     const [description, setDescription] = useState("An event to raise funds for a noble cause.")
     const [date, setDate] = useState("2025-02-15")
     const [location, setLocation] = useState("Community Hall, Downtown")
-    const [status, setStatus] = useState("approved")
     const [selectedModerators, setSelectedModerators] = useState([]);
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Axios Object:", axios);
 
-        const eventData = { title, description, date, location, status, selectedModerators }
-        console.log("New Event Data:", eventData)
-        console.log("Moderators : ",selectedModerators)
-        // Reset form fields after submission
-        setTitle("")
-        setDescription("")
-        setDate("")
-        setLocation("")
-        setStatus("approved")
-
-        setSelectedModerators([])
-    }
+        const eventData = {
+            title,
+            description,
+            date,
+            location,
+            moderators: selectedModerators, // Sending only IDs
+        };
+    
+        console.log("New Event Data:", eventData);
+        console.log("Moderators:", selectedModerators);
+    
+        try {
+            const response = await axios.post(
+                "http://localhost:3001/api/events/createEvent", // Adjust API endpoint if needed
+                eventData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${ token }`, // Assuming JWT auth
+                    },
+                }
+            );
+    
+            if (response.status === 201) {
+                alert("Event created successfully!");
+                // Reset form fields after submission
+                setTitle("");
+                setDescription("");
+                setDate("");
+                setLocation("");
+                setSelectedModerators([]);
+            }
+        } catch (error) {
+            console.error("Error creating event:", error.response?.data || error.message);
+            alert("Failed to create event. Please try again.");
+        }
+    };
 
     return (
         <div className="col-span-6 space-y-4 min-h-[69vh]">

@@ -24,12 +24,14 @@ console.log("In app.js")
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
-const eventRoutes= require('./routes/eventRoutes')
+const eventRoutes= require('./routes/eventRoutes');
+const userRoutes=require('./routes/userRoutes')
 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', profileRoutes);
-app.use('/api/events', eventRoutes)
+app.use('/api/events', eventRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/',(req,res)=>{
     res.send("hello ons lash route");

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Input } from "../ui/input"
+
 export default function ModeratorSearch({ selectedModerators, setSelectedModerators }) {
     const [query, setQuery] = useState("");
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedModeratorDetails, setSelectedModeratorDetails] = useState({});
 
     useEffect(() => {
         if (query.trim() === "") {
@@ -23,13 +24,17 @@ export default function ModeratorSearch({ selectedModerators, setSelectedModerat
             setLoading(false);
         }, 300); // 300ms debounce
 
-        return () => clearTimeout(debounceTimeout); // Cleanup timeout
+        return () => clearTimeout(debounceTimeout);
     }, [query]);
 
-    // Function to add a moderator
+    // Function to add a moderator (Store only ID)
     const handleAddModerator = (user) => {
-        if (!selectedModerators.some((mod) => mod._id === user._id)) {
-            setSelectedModerators([...selectedModerators, user]);
+        if (!selectedModerators.includes(user._id)) {
+            setSelectedModerators([...selectedModerators, user._id]);
+            setSelectedModeratorDetails({
+                ...selectedModeratorDetails,
+                [user._id]: user.username, // Store username for display
+            });
         }
         setQuery(""); // Clear search input after selection
         setUsers([]); // Clear user list
@@ -37,7 +42,10 @@ export default function ModeratorSearch({ selectedModerators, setSelectedModerat
 
     // Function to remove a moderator
     const handleRemoveModerator = (userId) => {
-        setSelectedModerators(selectedModerators.filter((mod) => mod._id !== userId));
+        setSelectedModerators(selectedModerators.filter((id) => id !== userId));
+        const updatedDetails = { ...selectedModeratorDetails };
+        delete updatedDetails[userId]; // Remove from display list
+        setSelectedModeratorDetails(updatedDetails);
     };
 
     return (
@@ -46,14 +54,14 @@ export default function ModeratorSearch({ selectedModerators, setSelectedModerat
 
             {/* Input Box with Selected Moderators */}
             <div className="border rounded w-full mt-1 p-2 flex flex-wrap gap-2 min-h-[40px] overflow-y-auto max-h-40">
-                {selectedModerators.map((mod) => (
+                {selectedModerators.map((id) => (
                     <div
-                        key={mod._id}
+                        key={id}
                         className="flex items-center bg-blue-500 text-white text-xs rounded-full py-1 px-2"
                     >
-                        <span>{mod.username}</span>
+                        <span>{selectedModeratorDetails[id]}</span>
                         <button
-                            onClick={() => handleRemoveModerator(mod._id)}
+                            onClick={() => handleRemoveModerator(id)}
                             className="ml-1 text-sm"
                         >
                             ✖

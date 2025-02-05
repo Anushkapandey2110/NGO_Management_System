@@ -1,7 +1,7 @@
 const { body, validationResult } = require('express-validator');
 
 exports.validateRegister = [
-    
+
     body('Email').isEmail().withMessage('Email is invalid'),
     body('Password').isLength({ min: 6 }).withMessage(body('Password')),
     body('ConfirmPassword').custom((value, { req }) => {

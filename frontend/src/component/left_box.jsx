@@ -8,34 +8,57 @@ import { Calendar, MapPin, Clock, Info } from 'lucide-react';
 const FloatingPreview = ({ event, position }) => {
   if (!event || !position) return null;
 
+  const previewPadding = 20; // Spacing from edges
+  const maxHeight = window.innerHeight - previewPadding; // Prevents overflow
+  
+  const previewRef = React.useRef(null);
+  const [adjustedTop, setAdjustedTop] = useState(position.y);
+
+  useEffect(() => {
+    if (previewRef.current) {
+      const previewHeight = previewRef.current.offsetHeight;
+      let newTop = position.y;
+
+      // If preview is going beyond viewport, move it up
+      if (position.y + previewHeight > maxHeight) {
+        newTop = maxHeight - previewHeight;
+      }
+
+      setAdjustedTop(Math.max(newTop, previewPadding)); // Ensure it doesn't go offscreen at the top
+    }
+  }, [position]);
+
   return (
     <div
-      className="fixed z-50 w-64 border-solid-red bg-white rounded-lg shadow-xl border"
+      ref={previewRef}
+      className="fixed z-50 w-72 border bg-white rounded-lg shadow-xl p-4"
       style={{
         left: `${position.x + 20}px`,
-        top: `${position.y}px`
+        top: `${adjustedTop}px`,
+        maxWidth: '300px',
       }}
     >
-      <div className="p-4">
-        <h3 className="text-lg font-semibold mb-3">{event.name}</h3>
-        <div className="space-y-3">
-          <div className="flex items-center text-sm">
-            <Calendar className="w-4 h-4 mr-2 text-blue-500" />
-            <span>{formatDate(event.date)}</span>
-          </div>
-          <div className="flex items-center text-sm">
-            <MapPin className="w-4 h-4 mr-2 text-red-500" />
-            <span>{event.location}</span>
-          </div>
-          <div className="flex mt-2 text-sm text-gray-600">
-            <Info className="w-4 h-4 mr-2" />
-            <span>{event.description}</span>
-          </div>
+      <h3 className="text-lg font-semibold mb-3">{event.name}</h3>
+      <div className="space-y-3">
+        <div className="flex items-center text-sm">
+          <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+          <span>{formatDate(event.date)}</span>
+        </div>
+        <div className="flex items-center text-sm">
+          <MapPin className="w-4 h-4 mr-2 text-red-500" />
+          <span>{event.location}</span>
+        </div>
+        <div className=" flex mt-2 text-sm text-gray-600">
+          <Info className="w-4 h-5 mr-2" />
+          <span>{event.description}</span> {/* Full description is now visible */}
         </div>
       </div>
     </div>
   );
 };
+
+
+
 
 const Leftbox = () => {
   const [event, setEvent] = useState([]);
