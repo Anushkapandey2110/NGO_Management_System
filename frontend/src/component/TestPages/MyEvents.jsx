@@ -97,7 +97,7 @@ const EventList = () => {
                     >
                       <TableCell key={event._id}
                         className="cursor-pointer hover:bg-gray-100"
-                        onClick={() => navigate(`/events/${event._id}`)}>{event.title}</TableCell>
+                        onClick={() => navigate(`/events/${event._id}`, { state: { event } })}>{event.title}</TableCell>
                       <TableCell>{formatDate(event.date)}</TableCell>
                       <TableCell>{event.location}</TableCell>
                       <TableCell>

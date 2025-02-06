@@ -93,7 +93,7 @@ const Leftbox = () => {
         const token = localStorage.getItem('token');
 
         const response = await axios.get(
-          'http://localhost:3001/api/events/getEvent',
+          'http://localhost:3001/api/events/getEvents',
           {
             headers: {
               Authorization: `Bearer ${token}`,

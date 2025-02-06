@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./db/mongoose');
 const User = require('./models/userModel');
 const Event= require('./models/eventModel')
+const Task= require('./models/taskModel')
 const morgan = require('morgan');
 const path = require('path');
 const authMiddleware = require('./middlewares/authMiddleware');
@@ -26,13 +27,13 @@ const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const eventRoutes= require('./routes/eventRoutes');
 const userRoutes=require('./routes/userRoutes')
-
+const taskRoutes=require('./routes/taskRoute')
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', profileRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
-
+app.use('/api/task', taskRoutes);
 app.get('/',(req,res)=>{
     res.send("hello ons lash route");
 })

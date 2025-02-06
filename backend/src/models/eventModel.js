@@ -52,6 +52,7 @@ const eventSchema = new mongoose.Schema({
   participants: [{
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     role: { type: String, enum: ['attendee', 'moderator'], default: 'attendee' },
+    _id: false,
   }],
   attendance: [attendanceSchema],
   createdAt: { type: Date, default: Date.now },

@@ -1,6 +1,6 @@
 const Event = require('../models/eventModel');
 const User = require('../models/userModel');
-
+const mongoose = require('mongoose');
 
 exports.createEvent = async (req, res) => {
     try {
@@ -34,12 +34,13 @@ exports.createEvent = async (req, res) => {
             role: 'moderator'
         }));
 
-        // Add event creator as a participant (optional)
+        // Add event creator as a moderator
         // participants.push({
         //     user: req.user.id,
-        //     role: 'moderator' // Assuming the creator is also a moderator
+        //     role: 'moderator' // Creator is a moderator
         // });
 
+        // Create the event
         const newEvent = new Event({
             title,
             description,
@@ -47,16 +48,41 @@ exports.createEvent = async (req, res) => {
             location,
             status,
             createdBy: req.user.id,
-            participants, // Store moderators in participants array
+            participants, // Store moderators (including the creator)
         });
 
+        // Save the event
         await newEvent.save();
-        res.status(201).json({ message: 'Event created successfully.', event: newEvent });
+
+        // Register the event for the creator and moderators (similar to the registration process)
+        const userIds = [req.user.id, ...validModerators.map(moderator => moderator._id)];
+
+        // Register each moderator and the creator for the event
+        for (const userId of userIds) {
+            const user = await User.findById(userId);
+            if (user) {
+                // Add the event to the user's registeredEvents array
+                if (!user.registeredEvents.includes(newEvent._id)) {
+                    user.registeredEvents.push(newEvent._id);
+                    await user.save();
+                }
+
+                // Add the user to the event's participants with role 'moderator'
+                if (!newEvent.participants.some(participant => participant.user.toString() === userId.toString())) {
+                    newEvent.participants.push({ user: userId, role: 'moderator' });
+                    await newEvent.save();
+                }
+            }
+        }
+
+        // Return a success response
+        res.status(201).json({ message: 'Event created and moderators registered successfully.', event: newEvent });
     } catch (error) {
         console.error("Error creating event:", error);
         res.status(500).json({ message: 'Server error.', error });
     }
 };
+
 
 
 exports.approveEvent = async (req, res) => {
@@ -122,7 +148,7 @@ exports.approveEvent = async (req, res) => {
 //         res.status(500).json({ message: 'Server error.', error });
 //     }
 // };
-exports.getEvent = async (req, res) => {
+exports.getEvents = async (req, res) => {
     try {
         const role = req.user.role;
         const userId = req.user._id;
@@ -333,4 +359,89 @@ exports.markComplete = async (req, res) => {
         console.error('Error marking event as completed:', error);
         res.status(500).json({ message: 'Server error. Please try again later.', error });
     }
+};
+
+// exports.getEvent=async(req,res)=>{
+//     try {
+//         const { eventId } = req.params; // Extract eventId from URL
+//         const { query } = req.query;   // Extract search query
+//         console.log("event id get event :", eventId)
+//         if (!mongoose.Types.ObjectId.isValid(eventId)) {
+//             return res.status(400).json({ message: "Invalid event ID format" });
+//           }
+//           console.log("eve id: " ,eventId)
+//         // Fetch event details along with participants (if stored in event schema)
+//         // const event = await Event.findById(eventId)
+//         // .select("title description date location participants") // Select necessary fields
+//         // .populate({
+//         //   path: "participants.user", // Populate the 'user' field inside participants
+//         //   select: "username email profilePicture", // Select user details
+//         // });
+//         const event = await Event.findById(eventId)
+//   .select("title description date location participants") // Select necessary fields
+//   .populate({
+//     path: "participants.user", // Populate the 'user' field inside participants
+//     select: "username email profilePicture", // Select user details
+//   })
+//   .lean(); // Convert Mongoose document to plain object for easier filtering
+
+// // Filter only attendees
+// event.participants = event.participants.filter(participant => participant.role === "attendee");
+    
+//         if (!event) {
+//           return res.status(404).json({ message: "Event not found" });
+//         }
+    
+//         res.status(200).json(event);
+//     } catch (error) {
+//         console.error("Error fetching event:", error);
+//         res.status(500).json({ message: "Internal Server Error" });
+//     }
+// }
+
+
+
+
+exports.getEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params; // Extract eventId from URL
+    const { query } = req.query; // Extract search query
+    console.log("Received event ID:", eventId, "Search query:", query);
+
+    // Validate eventId format
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res.status(400).json({ message: "Invalid event ID format" });
+    }
+
+    // Fetch event details along with participants
+    const event = await Event.findById(eventId)
+      .select("title description date location participants")
+      .populate({
+        path: "participants.user",
+        select: "username email profilePicture",
+      })
+      .lean(); // Convert to plain object for easier filtering
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Filter attendees who have role === "attendee"
+    let attendees = event.participants.filter(
+      (participant) => participant.role === "attendee"
+    );
+
+    // If search query is provided, filter attendees by username
+    if (query) {
+      attendees = attendees.filter((participant) =>
+        participant.user.username.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+    console.log(" eve and attendee : ", attendees)
+    // Return event details and filtered attendees
+    res.status(200).json({ event, attendees });
+  } catch (error) {
+    console.error("Error fetching event attendees:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };

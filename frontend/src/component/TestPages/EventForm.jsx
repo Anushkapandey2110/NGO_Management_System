@@ -44,11 +44,11 @@ export default function EventForm() {
             if (response.status === 201) {
                 alert("Event created successfully!");
                 // Reset form fields after submission
-                setTitle("");
-                setDescription("");
-                setDate("");
-                setLocation("");
-                setSelectedModerators([]);
+                // setTitle("");
+                // setDescription("");
+                // setDate("");
+                // setLocation("");
+                // setSelectedModerators([]);
             }
         } catch (error) {
             console.error("Error creating event:", error.response?.data || error.message);

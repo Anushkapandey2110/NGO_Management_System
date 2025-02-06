@@ -7,10 +7,10 @@ const NavBar = () => {
     const [activeTab, setActiveTab] = useState(null);
     const { userRole } = useRoleAuth();
     const tabs = [
-        { name: "Dashboard", path: "/dashboard", roles: ["User", "Employee"] },
-        { name: "My Events", path: "/myEvents", roles: ["User", "Employee"] },
-        { name: "Profile", path: "/profile", roles: ["User", "Employee"] },
-        { name: "Create Event", path: "/createEvent", roles: ["Employee"] } // Admin only
+        { name: "Dashboard", path: "/dashboard", roles: ["User", "Employee", "SuperAdmin", "Admin"] },
+        { name: "My Events", path: "/myEvents", roles: ["User", "Employee", "SuperAdmin", "Admin"] },
+        { name: "Profile", path: "/profile", roles: ["User", "Employee", "SuperAdmin", "Admin"] },
+        { name: "Create Event", path: "/createEvent", roles: ["Employee", "SuperAdmin", "Admin"] } // Admin only
     ];
 
 
